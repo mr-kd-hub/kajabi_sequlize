@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 
 import "./test.scss";
 import Updatecourse from "./Updatecourse";
+import Deletecourse from "./Deletecourse";
 
 const style = {
   width: "100%",
@@ -43,12 +44,11 @@ export default function Courselist() {
 
   const handleModelClose = () => setShow(false);
   const handleModelShow = (idd) => {
-    //  console.log(idd);
     setCid(idd);
     setShow(true);
   };
   const onDelete = (id) => {
-    console.log(id);
+    <Deletecourse td={id} />;
   };
   const onStatuschange = (event) => {
     setStatus(event.target.value);
@@ -112,12 +112,12 @@ export default function Courselist() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>
+                <MenuItem onClose={handleClose}>
                   <Button color="inherit" onClick={() => handleModelShow(1)}>
                     Edit
                   </Button>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClose={handleClose}>
                   <Button color="inherit" onClick={() => onDelete(1)}>
                     Delete{" "}
                   </Button>
