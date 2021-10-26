@@ -1,0 +1,14 @@
+.course-container {
+  .title-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: self-start;
+    flex-direction: column !important;
+  }
+  .sub-title-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: self-start;
+    flex-direction: column !important;
+  }
+}
