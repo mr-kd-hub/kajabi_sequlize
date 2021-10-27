@@ -3,14 +3,28 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Signup from "./pages/Signup";
 import { Route, Switch } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router";
+require("dotenv").config();
 function App() {
+  const authState = useSelector((state) => state.authReducer);
+
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/" component={Dashboard}>
+          {authState.token ? (
+            <>
+              <Dashboard />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
+        </Route>
         <Route exact path="/login" component={Login} />
+        {/* <Route exact path="/customer" component={Login} /> */}
         <Route exact path="/reg" component={Signup} />
+        <Route path="*">404! No Page Found</Route>
       </Switch>
     </div>
   );

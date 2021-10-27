@@ -15,6 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Home from "./Home";
 import Course from "./Course";
+import { useDispatch, useSelector } from "react-redux";
 import Offer from "./Offer";
 import Customer from "./Customer";
 import Coupan from "./Coupan";
@@ -26,6 +27,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { authAction } from "../redux/reducer/authSlice";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -72,6 +74,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Dashboard() {
+  const authState = useSelector((state) => state.authReducer);
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
   const [fragment, setFregment] = useState("HOME");
   const loadFragment = () => {
@@ -129,11 +133,6 @@ export default function Dashboard() {
             >
               Kajabi
             </Typography>
-            {/* <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -183,7 +182,12 @@ export default function Dashboard() {
                 </ListItemIcon>
                 <ListItemText primary="Customers" />
               </ListItem>
-              <ListItem button>
+              <ListItem
+                button
+                onClick={() => {
+                  dispatch(authAction.logout());
+                }}
+              >
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>

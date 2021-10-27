@@ -1,70 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import Offeradd from "../components/Offer/Offeradd";
 import Offerlist from "../components/Offer/Offerlist";
+import Toolbar from "@mui/material/Toolbar";
+
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+const ModelStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 function Offer() {
-  const [value, setValue] = React.useState(0);
+  const [show, setShow] = useState(false);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleModelClose = () => setShow(false);
+  const handleModelShow = (idd) => {
+    setShow(true);
   };
+
   return (
     <div>
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
+        <Box
+          sx={{ width: "100%", display: "flex", "align-items": "self-start" }}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => handleModelShow(1)}
+            startIcon={<ControlPointIcon />}
           >
-            <Tab label="Offers" {...a11yProps(0)} />
-            <Tab label="Create Offers" {...a11yProps(1)} />
-          </Tabs>
+            <span> New Offer</span>
+          </Button>
         </Box>
-        <TabPanel value={value} index={0}>
+        <Toolbar />
+        <Box>
           <Offerlist />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Offeradd />
-        </TabPanel>
+        </Box>
       </Box>
+      <Modal
+        open={show}
+        onClose={handleModelClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={ModelStyle}>
+          <Offeradd />
+        </Box>
+      </Modal>
     </div>
   );
 }

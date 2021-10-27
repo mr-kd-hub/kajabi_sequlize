@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -7,7 +9,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
+import axios from "axios";
 export default function Signup() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -30,10 +32,41 @@ export default function Signup() {
       email,
       password,
     };
+    axios
+      .post(`${process.env.REACT_APP_HOST}/admin/admin-reg`, detail)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success(res.data.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setName("");
+          setEmail("");
+          setPassword("");
+        } else {
+          toast.error(res.data.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {});
     console.log(detail);
   };
   return (
     <>
+      <ToastContainer />
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

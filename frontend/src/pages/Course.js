@@ -1,69 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Courseadd from "../components/Course/Courseadd";
 import Courselist from "../components/Course/Courselist";
+import Toolbar from "@mui/material/Toolbar";
+import Divider from "@mui/material/Divider";
+import Subcourselist from "../components/Course/Subcourse/Subcourselist";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import List from "../components/Course/List";
+const ModelStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 function Course() {
-  const [value, setValue] = React.useState(0);
+  // const [showCourse, setShowCourse] = useState(false);
+  // const handleCourseModelClose = () => setShowCourse(false);
+  // const handleCoursModelShow = (idd) => {
+  //   setShowCourse(true);
+  // };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   return (
     <div>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
+      <Box>
+        {/* <Box
+          sx={{ width: "100%", display: "flex", "align-items": "self-start" }}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => handleCoursModelShow(1)}
+            startIcon={<ControlPointIcon />}
           >
-            <Tab label="Course" {...a11yProps(0)} />
-            <Tab label="Create Course" {...a11yProps(1)} />
-          </Tabs>
+            <span> New Course</span>
+          </Button>
+        </Box> */}
+        {/* <Toolbar /> */}
+        <Box>
+          <List />
         </Box>
-        <TabPanel value={value} index={0}>
-          <Courselist />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Courseadd />
-        </TabPanel>
       </Box>
+      {/* <Modal
+        open={showCourse}
+        onClose={handleCourseModelClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={ModelStyle}>
+          <Courseadd />
+        </Box>
+      </Modal> */}
     </div>
   );
 }
