@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Courseadd from "../components/Course/Courseadd";
 import Courselist from "../components/Course/Courselist";
 import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
+import Contentlist from "../components/Course/Content/Contentlist";
+import { Redirect } from "react-router";
 import Subcourselist from "../components/Course/Subcourse/Subcourselist";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -14,6 +16,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import List from "../components/Course/List";
+import { useParams } from "react-router";
 const ModelStyle = {
   position: "absolute",
   top: "50%",
@@ -26,43 +29,39 @@ const ModelStyle = {
   p: 4,
 };
 
-function Course() {
-  // const [showCourse, setShowCourse] = useState(false);
-  // const handleCourseModelClose = () => setShowCourse(false);
-  // const handleCoursModelShow = (idd) => {
-  //   setShowCourse(true);
-  // };
+function Course(props) {
+  const param = useParams();
+  const authState = useSelector((state) => state.authReducer);
+  const dispatch = useDispatch();
+  const [cmp, setCmp] = React.useState(<Courselist />);
+  useEffect(() => {
+    switch (props.cmpName) {
+      case "subcourse":
+        {
+          authState.token ? (
+            setCmp(<Subcourselist id={param.cid} />)
+          ) : (
+            <Redirect to="/login" />
+          );
+        }
+        return;
+      case "content":
+        {
+          authState.token ? (
+            setCmp(<Contentlist id={param.sid} />)
+          ) : (
+            <Redirect to="/login" />
+          );
+        }
+        return;
+    }
+  }, [props.cmpName]);
 
   return (
     <div>
       <Box>
-        {/* <Box
-          sx={{ width: "100%", display: "flex", "align-items": "self-start" }}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => handleCoursModelShow(1)}
-            startIcon={<ControlPointIcon />}
-          >
-            <span> New Course</span>
-          </Button>
-        </Box> */}
-        {/* <Toolbar /> */}
-        <Box>
-          <List />
-        </Box>
+        <Box>{cmp}</Box>
       </Box>
-      {/* <Modal
-        open={showCourse}
-        onClose={handleCourseModelClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={ModelStyle}>
-          <Courseadd />
-        </Box>
-      </Modal> */}
     </div>
   );
 }

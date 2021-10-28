@@ -45,18 +45,14 @@ const ModelStyle = {
   boxShadow: 24,
   p: 4,
 };
-const Img = styled("img")({
-  display: "flex",
 
-  height: "150px",
-});
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 export default function Subcourselist(props) {
   const state = useSelector((state) => state.flowReducer);
   const subcourseid = props.id;
-  const courseid = state.id; //from parent
+  // const courseid = state.id; //from parent
   const [dense, setDense] = React.useState(false);
   const [status, setStatus] = useState("Draft");
   const [show, setShow] = useState(false);
@@ -91,7 +87,9 @@ export default function Subcourselist(props) {
   };
   return (
     <>
+      {subcourseid}
       <Box sx={{ width: "100%", display: "flex", "align-items": "self-start" }}>
+        {subcourseid}
         <Button
           color="primary"
           variant="contained"
@@ -112,18 +110,23 @@ export default function Subcourselist(props) {
                 </Avatar>
               </ListItemAvatar>
 
-              <ListItemText
-                primary="Single-line item"
-                onClick={() => {
-                  dispatch(
-                    flowAction.setFlow({
-                      show: true,
-                      id: subcourseid,
-                      subcourse: false,
-                    })
-                  );
-                }}
-              />
+              <ListItemText>
+                <Link to="/course/subcourse/1">Single-line item</Link>
+              </ListItemText>
+              {/* <Link to="/subcourse/1">
+                <ListItemText
+                  primary="Single-line item"
+                  // onClick={() => {
+                  //   dispatch(
+                  //     flowAction.setFlow({
+                  //       show: true,
+                  //       id: subcourseid,
+                  //       subcourse: false,
+                  //     })
+                  //   );
+                  // }}
+                />
+              </Link> */}
 
               <Grid item xs={7} md={8} lg={2} className={"title-container"}>
                 <Box>
@@ -174,74 +177,6 @@ export default function Subcourselist(props) {
               </Grid>
             </ListItem>
             <Divider />
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
-              </ListItemAvatar>
-
-              <ListItemText
-                primary="Single-line item"
-                onClick={() => {
-                  dispatch(
-                    flowAction.setFlow({
-                      show: true,
-                      id: subcourseid,
-                      subcourse: false,
-                    })
-                  );
-                }}
-              />
-
-              <Grid item xs={7} md={8} lg={2} className={"title-container"}>
-                <Box>
-                  <Select
-                    onChange={onStatuschange}
-                    name="status"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={status}
-                    label="Status"
-                    fullWidth
-                  >
-                    <MenuItem value="Draft">Draft</MenuItem>
-                    <MenuItem value="Publist">Publist</MenuItem>
-                  </Select>
-                </Box>
-              </Grid>
-              <Grid item xs={2} lg={2} className={"sub-title-container"}>
-                <Button
-                  id="basic-button"
-                  aria-controls="basic-menu"
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  onClick={handleClick}
-                >
-                  <MoreVertIcon fontSize="large" />
-                </Button>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem onClose={handleClose}>
-                    <Button color="inherit" onClick={() => handleModelShow(2)}>
-                      Edit
-                    </Button>
-                  </MenuItem>
-                  <MenuItem onClose={handleClose}>
-                    <Button color="inherit" onClick={() => onDelete(2)}>
-                      Delete{" "}
-                    </Button>
-                  </MenuItem>
-                </Menu>
-              </Grid>
-            </ListItem>
           </List>
         </Box>
       </Demo>
@@ -269,7 +204,7 @@ export default function Subcourselist(props) {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create New Sub Course
           </Typography>
-          <Addsubcourse id={courseid} />
+          <Addsubcourse id="1" />
         </Box>
       </Modal>
     </>

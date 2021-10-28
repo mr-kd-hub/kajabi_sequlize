@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
+import { Redirect } from "react-router";
+
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -28,6 +30,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import Typography from "@mui/material/Typography";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { authAction } from "../redux/reducer/authSlice";
+import { Link, Switch, Route, useRouteMatch } from "react-router-dom";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -73,32 +76,52 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const authState = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
-  const [fragment, setFregment] = useState("HOME");
-  const loadFragment = () => {
-    switch (fragment) {
-      case "HOME":
-        return <Home />;
+  const [cmp, setCmp] = React.useState(<Home />);
 
-      case "COURSE":
-        return <Course />;
+  useEffect(() => {
+    switch (props.cmpName) {
+      case "home":
+        {
+          authState.token ? setCmp(<Home />) : <Redirect to="/login" />;
+        }
+        return;
+      case "course":
+        {
+          authState.token ? setCmp(<Course />) : <Redirect to="/login" />;
+        }
 
-      case "OFFERS":
-        return <Offer />;
+        return;
+      case "offer":
+        {
+          authState.token ? setCmp(<Offer />) : <Redirect to="/login" />;
+        }
 
-      case "USERS":
-        return <Customer />;
+        return;
+      case "customer":
+        {
+          authState.token ? setCmp(<Customer />) : <Redirect to="/login" />;
+        }
+        return;
 
-      case "COUPENS":
-        return <Coupan />;
+      case "coupan":
+        {
+          authState.token ? setCmp(<Coupan />) : <Redirect to="/login" />;
+        }
+        return;
 
       default:
-        break;
+        {
+          authState.token ? setCmp(<Home />) : <Redirect to="/login" />;
+        }
+
+        return;
     }
-  };
+  }, [props.cmpName]);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -151,37 +174,47 @@ export default function Dashboard() {
           <Divider />
           <List>
             <div>
-              <ListItem button onClick={(e) => setFregment("HOME")}>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </ListItem>
-
-              <ListItem button onClick={(e) => setFregment("COURSE")}>
-                <ListItemIcon>
-                  <OndemandVideoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Course" />
-              </ListItem>
-              <ListItem button onClick={(e) => setFregment("OFFERS")}>
-                <ListItemIcon>
-                  <LocalOfferIcon />
-                </ListItemIcon>
-                <ListItemText primary="Offers" />
-              </ListItem>
-              <ListItem button onClick={(e) => setFregment("COUPENS")}>
-                <ListItemIcon>
-                  <BarChartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Coupans" />
-              </ListItem>
-              <ListItem button onClick={(e) => setFregment("USERS")}>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Customers" />
-              </ListItem>
+              <Link to={"/"}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+              </Link>
+              <Link to={`/course`}>
+                <ListItem button>
+                  {" "}
+                  <ListItemIcon>
+                    <OndemandVideoIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Course" />
+                </ListItem>
+              </Link>
+              <Link to={`/offer`}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <LocalOfferIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Offers" />
+                </ListItem>
+              </Link>
+              <Link to={`/coupan`}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <BarChartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Coupans" />
+                </ListItem>
+              </Link>
+              <Link to="/customer">
+                <ListItem button>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Customers" />
+                </ListItem>
+              </Link>
               <ListItem
                 button
                 onClick={() => {
@@ -211,8 +244,9 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
+
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {loadFragment()}
+            {cmp}
           </Container>
         </Box>
       </Box>

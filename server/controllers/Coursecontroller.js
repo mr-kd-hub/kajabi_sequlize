@@ -8,8 +8,9 @@ const addCourse = async (req, res) => {
       return res.send({ message: "Fields are Required..." });
     let thumbnail;
     if (req.file) {
-      thumbnail = req.file.filename;
+      thumbnail = req.file.path;
     }
+    // res.send();
     const title = req.body.title;
     const status = req.body.status || 0;
     const description = req.body.description;
@@ -30,10 +31,12 @@ const addCourse = async (req, res) => {
 const showCourse = async (req, res) => {
   try {
     const course = await Course.findAll();
-    if (course.length === 0) return res.send({ message: "No Course Found." });
-    return res.send(course);
+    if (course.length === 0)
+      return res.send({ success: false, message: "No Course Found." });
+    return res.send({ success: true, course });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Display Course...",
       err: err.message,
     });
@@ -121,7 +124,7 @@ const updateCourse = async (req, res) => {
       return res.send({ message: "Fields are Required..." });
     let thumbnail;
     if (req.file) {
-      thumbnail = req.file.filename;
+      thumbnail = req.file.path;
     }
     const course = await Course.update(
       { title, thumbnail, status, description },

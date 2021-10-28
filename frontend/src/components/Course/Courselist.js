@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
@@ -10,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
+import { useParams } from "react-router";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -21,6 +25,8 @@ import Updatecourse from "./Updatecourse";
 import Deletecourse from "./Deletecourse";
 import { Link } from "react-router-dom";
 import { flowAction } from "../../redux/reducer/Flowslice";
+import axios from "axios";
+import authAxios from "../../utils/axios";
 const style = {
   width: "100%",
   flexGrow: 1,
@@ -46,7 +52,23 @@ const Demo = styled("div")(({ theme }) => ({
 }));
 export default function Courselist() {
   const [status, setStatus] = useState("Draft");
-  useEffect(() => {}, []);
+  const [courses, setCourse] = useState([]);
+  const param = useParams();
+  useEffect(async () => {
+    const res = await authAxios.get(`/course/all-course`);
+    if (!res.data.success) {
+      toast.error(res.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    setCourse(res.data.course);
+  }, []);
   //add course model
   const [showCourse, setShowCourse] = useState(false);
   const handleCourseModelClose = () => setShowCourse(false);
@@ -78,12 +100,19 @@ export default function Courselist() {
   const onDelete = (id) => {
     <Deletecourse id={id} />;
   };
-  const onStatuschange = (event) => {
+  const onStatuschange = async (event) => {
+    let s;
+    if (status === "Draft") s = 0;
+    if (status === "Publish") s = 1;
+    console.log(s);
+    // await authAxios.patch(`/course/status/${id}/?status=${s}`);
     setStatus(event.target.value);
   };
 
   return (
     <>
+      {" "}
+      <ToastContainer />
       {/* course add button */}
       <Box sx={{ width: "100%", display: "flex", "align-items": "self-start" }}>
         <Button
@@ -99,173 +128,112 @@ export default function Courselist() {
       <Box sx={style} className={"course-container"}>
         <Paper>
           <List>
-            <ListItem sx={{ marginTop: "1px" }}>
-              <Grid container>
-                <Grid item xs={12} lg={3} md={4}>
-                  <Img
-                    alt="complex"
-                    src="https://cdn.pixabay.com/photo/2021/10/13/15/09/water-6706894_960_720.jpg"
-                  />
-                </Grid>
-                <Grid item xs={7} md={8} lg={5} className={"title-container"}>
-                  <Typography>
-                    <Link
-                      to=""
-                      onClick={() => {
-                        dispatch(
-                          flowAction.setFlow({
-                            show: false,
-                            id: 1,
-                            subcourse: true,
-                          })
-                        );
-                      }}
-                    >
-                      Title
-                    </Link>
-                  </Typography>
-                  <Typography>Title</Typography>
-                </Grid>
-                <Grid item xs={7} md={8} lg={2} className={"title-container"}>
-                  <Box>
-                    {/* Status */}
-                    <Select
-                      onChange={onStatuschange}
-                      name="status"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={status}
-                      label="Status"
-                      fullWidth
-                    >
-                      <MenuItem value="Draft">Draft</MenuItem>
-                      <MenuItem value="Publist">Publist</MenuItem>
-                    </Select>
-                  </Box>
-                </Grid>
-                <Grid item xs={2} lg={2} className={"sub-title-container"}>
-                  {/* vertical Menu */}
-                  <Button
-                    id="basic-button"
-                    aria-controls="basic-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreVertIcon fontSize="large" />
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClose={handleClose}>
-                      <Button
-                        color="inherit"
-                        onClick={() => handleModelShow(1)}
-                      >
-                        Edit
-                      </Button>
-                    </MenuItem>
-                    <MenuItem onClose={handleClose}>
-                      <Button color="inherit" onClick={() => onDelete(1)}>
-                        Delete{" "}
-                      </Button>
-                    </MenuItem>
-                  </Menu>
-                </Grid>
-              </Grid>
-            </ListItem>
-            {/* 2 */}
-            <ListItem>
-              <Grid container>
-                <Grid item xs={12} lg={3} md={4}>
-                  <Img
-                    alt="complex"
-                    src="https://cdn.pixabay.com/photo/2021/10/13/15/09/water-6706894_960_720.jpg"
-                  />
-                </Grid>
-                <Grid item xs={7} md={8} lg={5} className={"title-container"}>
-                  <Typography>
-                    <Link
-                      to=""
-                      onClick={() => {
-                        dispatch(
-                          flowAction.setFlow({
-                            show: false,
-                            id: 1,
-                            subcourse: true,
-                          })
-                        );
-                      }}
-                    >
-                      Title
-                    </Link>
-                  </Typography>
-                  <Typography>Title</Typography>
-                </Grid>
-                <Grid item xs={7} md={8} lg={2} className={"title-container"}>
-                  <Box>
-                    {/* Status */}
-                    <Select
-                      onChange={onStatuschange}
-                      name="status"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={status}
-                      label="Status"
-                      fullWidth
-                    >
-                      <MenuItem value="Draft">Draft</MenuItem>
-                      <MenuItem value="Publist">Publist</MenuItem>
-                    </Select>
-                  </Box>
-                </Grid>
-                <Grid item xs={2} lg={2} className={"sub-title-container"}>
-                  {/* vertical Menu */}
-                  <Button
-                    id="basic-button"
-                    aria-controls="basic-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreVertIcon fontSize="large" />
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClose={handleClose}>
-                      <Button
-                        color="inherit"
-                        onClick={() => handleModelShow(1)}
-                      >
-                        Edit
-                      </Button>
-                    </MenuItem>
-                    <MenuItem onClose={handleClose}>
-                      <Button color="inherit" onClick={() => onDelete(1)}>
-                        Delete{" "}
-                      </Button>
-                    </MenuItem>
-                  </Menu>
-                </Grid>
-              </Grid>
-            </ListItem>
+            {(courses &&
+              courses.map((course, i) => {
+                return (
+                  <>
+                    <ListItem sx={{ marginTop: "1px" }}>
+                      <Grid container>
+                        <Grid item xs={12} lg={3} md={4}>
+                          <Img
+                            alt="No Thmbnail"
+                            src={
+                              `${process.env.REACT_APP_HOST}/${course.thumbnail}` ||
+                              "data:,"
+                            }
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={7}
+                          md={8}
+                          lg={5}
+                          className={"title-container"}
+                        >
+                          <Typography>
+                            <Link to={`/course/${course.id}`}>
+                              {course.title}
+                            </Link>
+                          </Typography>
+                          <Typography>{course.description}</Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={7}
+                          md={8}
+                          lg={2}
+                          className={"title-container"}
+                        >
+                          <Box>
+                            {/* Status */}
+                            <Select
+                              onChange={() => {
+                                onStatuschange();
+                              }}
+                              name="status"
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={course.status ? "Publish" : "Draft"}
+                              label="Status"
+                              fullWidth
+                            >
+                              <MenuItem value="Draft">Draft</MenuItem>
+                              <MenuItem value="Publish">Publish</MenuItem>
+                            </Select>
+                          </Box>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={2}
+                          lg={2}
+                          className={"sub-title-container"}
+                        >
+                          {/* vertical Menu */}
+                          <Button
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={handleClick}
+                          >
+                            <MoreVertIcon fontSize="large" />
+                          </Button>
+                          <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                              "aria-labelledby": "basic-button",
+                            }}
+                          >
+                            <MenuItem onClose={handleClose}>
+                              <Button
+                                color="inherit"
+                                onClick={() => handleModelShow(course.id)}
+                              >
+                                Edit
+                              </Button>
+                            </MenuItem>
+                            <MenuItem onClose={handleClose}>
+                              <Button
+                                color="inherit"
+                                onClick={() => onDelete(course.id)}
+                              >
+                                Delete{" "}
+                              </Button>
+                            </MenuItem>
+                          </Menu>
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  </>
+                );
+              })) ||
+              "No Course Found"}
           </List>
         </Paper>
       </Box>
-
       {/* update  model */}
       <Modal
         open={show}

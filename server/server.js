@@ -25,6 +25,7 @@ sequelize
     console.log("Something Wrong In Databse connection : " + err);
   });
 const app = express();
+app.use("/thumbnails", express.static("thumbnails"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
