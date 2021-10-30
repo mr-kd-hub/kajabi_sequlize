@@ -56,7 +56,7 @@ const login = async (req, res) => {
       user.toJSON = function () {
         return { email, token };
       };
-      return res.send({ success: true, message: "Success login", user });
+      return res.send({ success: true, message: "Welcome...", user });
     } else {
       return res.send({ success: false, message: "User Not Found..." });
     }

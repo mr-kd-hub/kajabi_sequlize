@@ -11,8 +11,9 @@ import Container from "@mui/material/Container";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { authAction } from "../redux/reducer/authSlice";
 import "react-toastify/dist/ReactToastify.css";
+
+import { authAction } from "../redux/reducer/authSlice";
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();

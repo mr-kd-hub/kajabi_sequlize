@@ -87,9 +87,7 @@ export default function Subcourselist(props) {
   };
   return (
     <>
-      {subcourseid}
       <Box sx={{ width: "100%", display: "flex", "align-items": "self-start" }}>
-        {subcourseid}
         <Button
           color="primary"
           variant="contained"

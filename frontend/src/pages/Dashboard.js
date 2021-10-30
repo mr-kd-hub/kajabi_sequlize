@@ -82,174 +82,182 @@ export default function Dashboard(props) {
   const [open, setOpen] = React.useState(true);
   const [cmp, setCmp] = React.useState(<Home />);
 
+  const flowState = useSelector((state) => state.flowReducer);
   useEffect(() => {
     switch (props.cmpName) {
       case "home":
         {
-          authState.token ? setCmp(<Home />) : <Redirect to="/login" />;
+          setCmp(<Home />);
         }
         return;
       case "course":
         {
-          authState.token ? setCmp(<Course />) : <Redirect to="/login" />;
+          setCmp(<Course {...props} />);
         }
-
         return;
       case "offer":
         {
-          authState.token ? setCmp(<Offer />) : <Redirect to="/login" />;
+          setCmp(<Offer />);
         }
 
         return;
       case "customer":
         {
-          authState.token ? setCmp(<Customer />) : <Redirect to="/login" />;
+          setCmp(<Customer />);
         }
         return;
 
       case "coupan":
         {
-          authState.token ? setCmp(<Coupan />) : <Redirect to="/login" />;
+          setCmp(<Coupan />);
         }
         return;
 
       default:
         {
-          authState.token ? setCmp(<Home />) : <Redirect to="/login" />;
+          setCmp(<Home />);
         }
 
         return;
     }
-  }, [props.cmpName]);
+  }, [props.cmpName, flowState, authState]);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Kajabi
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List>
-            <div>
-              <Link to={"/"}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Dashboard" />
-                </ListItem>
-              </Link>
-              <Link to={`/course`}>
-                <ListItem button>
-                  {" "}
-                  <ListItemIcon>
-                    <OndemandVideoIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Course" />
-                </ListItem>
-              </Link>
-              <Link to={`/offer`}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <LocalOfferIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Offers" />
-                </ListItem>
-              </Link>
-              <Link to={`/coupan`}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <BarChartIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Coupans" />
-                </ListItem>
-              </Link>
-              <Link to="/customer">
-                <ListItem button>
-                  <ListItemIcon>
-                    <PeopleIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Customers" />
-                </ListItem>
-              </Link>
-              <ListItem
-                button
-                onClick={() => {
-                  dispatch(authAction.logout());
+      {authState.token ? (
+        <>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar position="absolute" open={open}>
+              <Toolbar
+                sx={{
+                  pr: "24px", // keep right padding when drawer closed
                 }}
               >
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Logout" />
-              </ListItem>
-            </div>
-          </List>
-          <Divider />
-          <List></List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={toggleDrawer}
+                  sx={{
+                    marginRight: "36px",
+                    ...(open && { display: "none" }),
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography
+                  component="h1"
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  Kajabi
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+              <Toolbar
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  px: [1],
+                }}
+              >
+                <IconButton onClick={toggleDrawer}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </Toolbar>
+              <Divider />
+              <List>
+                <div>
+                  <Link to={"/"}>
+                    <ListItem button>
+                      <ListItemIcon>
+                        <DashboardIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Dashboard" />
+                    </ListItem>
+                  </Link>
+                  <Link to={`/course`}>
+                    <ListItem button>
+                      {" "}
+                      <ListItemIcon>
+                        <OndemandVideoIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Course" />
+                    </ListItem>
+                  </Link>
+                  <Link to={`/offer`}>
+                    <ListItem button>
+                      <ListItemIcon>
+                        <LocalOfferIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Offers" />
+                    </ListItem>
+                  </Link>
+                  <Link to={`/coupan`}>
+                    <ListItem button>
+                      <ListItemIcon>
+                        <BarChartIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Coupans" />
+                    </ListItem>
+                  </Link>
+                  <Link to="/customer">
+                    <ListItem button>
+                      <ListItemIcon>
+                        <PeopleIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Customers" />
+                    </ListItem>
+                  </Link>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      dispatch(authAction.logout());
+                    }}
+                  >
+                    <ListItemIcon>
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </ListItem>
+                </div>
+              </List>
+              <Divider />
+              <List></List>
+            </Drawer>
+            <Box
+              component="main"
+              sx={{
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? theme.palette.grey[100]
+                    : theme.palette.grey[900],
+                flexGrow: 1,
+                height: "100vh",
+                overflow: "auto",
+              }}
+            >
+              <Toolbar />
 
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {cmp}
-          </Container>
-        </Box>
-      </Box>
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                {cmp}
+              </Container>
+            </Box>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Redirect to="/login" />
+        </>
+      )}
     </>
   );
 }

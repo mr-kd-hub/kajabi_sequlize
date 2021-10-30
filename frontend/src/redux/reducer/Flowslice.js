@@ -2,17 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const Flowslice = createSlice({
   name: "FlowSlice",
-  initialState: { show: false, id: 0, subcourse: false },
+  initialState: { updateCourseList: null },
   reducers: {
     setFlow(state, action) {
-      state.show = action.payload.show;
-      state.subcourse = action.payload.subcourse;
-      state.id = action.payload.id;
+      state.updateCourseList = action.payload.courseAdd;
     },
     reset(state, action) {
-      state.show = false;
-      state.subcourse = false;
-      state.id = 0;
+      state.updateCourseList = null;
     },
   },
 });

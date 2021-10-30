@@ -20,7 +20,7 @@ router.delete("/:id", auth, courseController.deleteCourse);
 router.patch("/status/:id", auth, courseController.updateStatus);
 router.get("/:id", auth, courseController.showCourseInUpdateForm);
 router.patch(
-  "/modi",
+  "/modi/:id",
   auth,
   thumbnailMiddleware.single("thumbnail"),
   courseController.updateCourse,

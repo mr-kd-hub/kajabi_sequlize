@@ -10,7 +10,8 @@ import Subcourselist from "../components/Course/Subcourse/Subcourselist";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+
+import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
@@ -34,8 +35,9 @@ function Course(props) {
   const authState = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [cmp, setCmp] = React.useState(<Courselist />);
+  console.log(props);
   useEffect(() => {
-    switch (props.cmpName) {
+    switch (props.subcmp) {
       case "subcourse":
         {
           authState.token ? (
@@ -55,7 +57,7 @@ function Course(props) {
         }
         return;
     }
-  }, [props.cmpName]);
+  }, [props.subcmp]);
 
   return (
     <div>

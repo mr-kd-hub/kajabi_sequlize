@@ -6,6 +6,8 @@ import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import Course from "./pages/Course";
+import Typography from "@mui/material/Typography";
+import { ToastContainer, toast } from "react-toastify";
 require("dotenv").config();
 function App() {
   const authState = useSelector((state) => state.authReducer);
@@ -13,19 +15,14 @@ function App() {
   // console.log(authState.isValid);
   return (
     <div className="App">
+      <ToastContainer />
       <Switch>
         <Route exact path="/">
-          {authState.token ? (
-            <>
-              <Route
-                exact
-                path="/"
-                component={() => <Dashboard cmpName={"home"} />}
-              />
-            </>
-          ) : (
-            <Redirect to="/login" />
-          )}
+          <Route
+            exact
+            path="/"
+            component={() => <Dashboard cmpName={"home"} />}
+          />
         </Route>
         <Route
           exact
@@ -55,12 +52,14 @@ function App() {
         <Route
           exact
           path="/course/:cid"
-          component={() => <Course cmpName={"subcourse"} />}
+          component={() => (
+            <Dashboard cmpName={"course"} subcmp={"subcourse"} />
+          )}
         />
         <Route
           exact
           path="/course/subcourse/:sid"
-          component={() => <Course cmpName={"content"} />}
+          component={() => <Dashboard cmpName={"course"} subcmp={"content"} />}
         />
 
         <Route exact path="/login" component={Login} />

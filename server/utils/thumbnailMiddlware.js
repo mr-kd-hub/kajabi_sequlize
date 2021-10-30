@@ -27,15 +27,3 @@ const thumbnailMiddleware = multer({
   fileFilter: fileFilter,
 });
 module.exports = thumbnailMiddleware;
-// {
-//   dest: "./thumbnails/",
-//   limits: {
-//     fileSize: 5000000, //1mb
-//   },
-//   fileFilter(req, file, cb) {
-//     if () {
-//       return cb(new Error("Not Valide Formate..."));
-//     }
-//     cb(undefined, true);
-//   },
-// }

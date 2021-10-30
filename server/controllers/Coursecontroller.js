@@ -10,7 +10,7 @@ const addCourse = async (req, res) => {
     if (req.file) {
       thumbnail = req.file.path;
     }
-    // res.send();
+    // return console.log(req.file);
     const title = req.body.title;
     const status = req.body.status || 0;
     const description = req.body.description;
@@ -21,18 +21,22 @@ const addCourse = async (req, res) => {
       description,
       createdBy,
     });
-    if (!course) return res.send({ message: "Course Not Added..." });
-    return res.send({ message: "Course Added...", course });
+    if (!course)
+      return res.send({ success: false, message: "Course Not Added..." });
+    return res.send({ success: true, message: "Course Added...", course });
   } catch (err) {
-    return res.send({ message: "Error in Add Course...", err: err.message });
+    return res.send({
+      success: false,
+      message: "Error in Add Course...",
+      err: err.message,
+    });
   }
 };
 //show all course
 const showCourse = async (req, res) => {
   try {
     const course = await Course.findAll();
-    if (course.length === 0)
-      return res.send({ success: false, message: "No Course Found." });
+    if (course.length === 0) return res.send({ success: false });
     return res.send({ success: true, course });
   } catch (err) {
     return res.send({
@@ -70,7 +74,7 @@ const updateStatus = async (req, res) => {
     const id = req.params.id;
     let createdBy = req.currentUser.email;
 
-    if (!id) return res.send({ message: "No Course Selected" });
+    if (!id) return res.send({ success: false, message: "No Course Selected" });
     const status = req.query.status || 0;
     const course = await Course.update(
       { status },
@@ -78,11 +82,13 @@ const updateStatus = async (req, res) => {
     );
     if (course[0] === 0)
       return res.send({
+        success: false,
         message: "You Cant Change Visibility of this Course",
       });
-    return res.send({ message: "Course Status Updated..." });
+    return res.send({ success: true, message: "Course Status Updated..." });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Update Status...",
       err: err.message,
     });
@@ -92,17 +98,18 @@ const updateStatus = async (req, res) => {
 const showCourseInUpdateForm = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) return res.send({ message: "No Course Selected" });
-    const course = await Course.findAll({
+    if (!id) return res.send({ success: false, message: "No Course Selected" });
+    const course = await Course.findOne({
       where: {
         id,
       },
     });
     if (course.length === 0)
-      return res.send({ message: "Course Not Found..." });
+      return res.send({ success: false, message: "Course Not Found..." });
     return res.send(course);
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Update Course...",
       err: err.message,
     });
@@ -112,7 +119,7 @@ const showCourseInUpdateForm = async (req, res) => {
 const updateCourse = async (req, res) => {
   try {
     // return res.send(req);
-    const id = req.body.id;
+    const id = req.params.id;
     const title = req.body.title;
     const status = req.body.status || 0;
     const description = req.body.description;
@@ -121,20 +128,24 @@ const updateCourse = async (req, res) => {
     //return res.send({ id, title, status, description });
     if (!id) return res.send({ message: "No product Selected" });
     if (title === "" && description === "")
-      return res.send({ message: "Fields are Required..." });
+      return res.send({ success: false, message: "Fields are Required..." });
     let thumbnail;
     if (req.file) {
       thumbnail = req.file.path;
     }
     const course = await Course.update(
       { title, thumbnail, status, description },
-      { where: { id, createdBy } }
+      { where: { id } }
     );
     if (course[0] === 0)
-      return res.send({ message: "You Cant Update this course...", course });
-    return res.send({ message: "Course Updated..." });
+      return res.send({
+        success: false,
+        message: "You Cant Update this course...",
+      });
+    return res.send({ success: true, message: "Course Updated..." });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Update Course...",
       err: err.message,
     });
