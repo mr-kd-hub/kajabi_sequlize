@@ -100,7 +100,7 @@ export default function Subcourselist(props) {
   const onDelete = async (id) => {
     // <Deletesubcourse id={id} />;
     let flag;
-    if (window.confirm(`Are You Sure?${id}`)) {
+    if (window.confirm(`Are You Sure?`)) {
       flag = await Deletesubcourse(id);
       // setIsDeleted(flag);
       dispatch(flowAction.setFlow({ courseAdd: flag }));

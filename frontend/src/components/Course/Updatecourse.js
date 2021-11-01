@@ -23,7 +23,7 @@ function Updatecourse(props) {
   const dispatch = useDispatch();
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [status, setStatus] = useState("Draft");
+  const [status, setStatus] = useState(0);
   const [thumbnail, setThumbnail] = useState();
   const [cid, setCid] = useState();
   const [course, setCourse] = useState({});

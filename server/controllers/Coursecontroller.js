@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-// const path = "C:Users\\lcom\\Desktop\\Fullstack\\server\\thumbnails\\";
+
 //add new course
 const addCourse = async (req, res) => {
   try {

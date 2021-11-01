@@ -8,28 +8,42 @@ const addContent = async (req, res) => {
     const status = req.body.status || 0;
     const currentUser = req.currentUser.email;
 
-    let video = "";
+    let videos;
     if (req.file) {
-      video = req.file.filename;
+      videos = req.file.path;
     }
-    if (title === "" || video === "")
-      return res.send({ message: "All Fields are Required..." });
+
+    if (title === "" || videos === "")
+      return res.send({
+        success: false,
+        message: "All Fields are Required...",
+      });
     const subcourse = await Subcourse.findOne({ where: { id: subid } });
-    if (!subcourse) return res.send({ message: "You Can`t Add sub-Course..." });
+
+    if (!subcourse)
+      return res.send({
+        success: false,
+        message: "You Can`t Add sub-Course...",
+      });
     if (subcourse.createdBy !== currentUser)
       return res.send({
+        success: false,
         message: "You Have Not Rights To Modify this Course",
       });
     const content = subcourse.createContent({
       title,
       status,
-      url: video,
+      url: videos,
       createdBy: currentUser,
     });
-    if (!content) return res.send({ message: "Video Not Added..." });
-    return res.send({ message: "Video Added..." });
+    if (content) return res.send({ success: true, message: "Video Added..." });
+    return res.send({ success: false, message: "Video Not Added...", content });
   } catch (err) {
-    return res.send({ message: "Video not Added...", err });
+    return res.send({
+      success: false,
+      message: "Video not Added...",
+      err: err.message,
+    });
   }
 };
 //update status of video
@@ -37,7 +51,7 @@ const updateStatus = async (req, res) => {
   try {
     const id = req.params.cid;
     const currentUser = req.currentUser.email;
-    if (!id) return res.send({ message: "No Course Selected" });
+    if (!id) return res.send({ success: false, message: "No Course Selected" });
     const status = req.query.status || 0;
     const content = await Content.update(
       { status },
@@ -90,17 +104,19 @@ const removeVideo = async (req, res) => {
   try {
     const id = req.params.cid;
     const currentUser = req.currentUser.email;
-    if (!id) return res.send({ message: "No Video Selected" });
+    if (!id) return res.send({ success: false, message: "No Video Selected" });
     const content = await Content.destroy({
       where: {
         id,
         createdBy: currentUser,
       },
     });
-    if (!content) return res.send({ message: "You Cant Delete Video..." });
-    return res.send({ message: "Video Deleted..." });
+    if (!content)
+      return res.send({ success: false, message: "You Cant Delete Video..." });
+    return res.send({ success: true, message: "Video Deleted..." });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Delete Video...",
       err: err.message,
     });
@@ -111,10 +127,12 @@ const showideos = async (req, res) => {
   try {
     const subCourseId = req.params.sid;
     const course = await Content.findAll({ where: { subCourseId } });
-    if (course.length === 0) return res.send({ message: "No Videos Found." });
-    return res.send(course);
+    if (course.length === 0)
+      return res.send({ success: false, message: "No Videos Found." });
+    return res.send({ success: true, course });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Display Videos...",
       err: err.message,
     });
@@ -122,19 +140,24 @@ const showideos = async (req, res) => {
 };
 //disply single vido
 const showSingleVideo = async (req, res) => {
-  const id = req.params.cid;
   try {
     const id = req.params.cid;
-    if (!id) return res.send({ message: "No Video Selected" });
+    if (!id) return res.send({ success: false, message: "No Video Selected" });
     const video = await Content.findAll({
       where: {
         id,
       },
     });
-    if (video.length === 0) return res.send({ message: "Course Not Found..." });
-    return res.send(subcourse);
+    if (video.length === 0)
+      return res.send({
+        success: false,
+        message: "Course Not Found...",
+        video,
+      });
+    return res.send({ success: true, video });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Show Video...",
       err: err.message,
     });

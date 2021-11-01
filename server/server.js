@@ -26,6 +26,7 @@ sequelize
   });
 const app = express();
 app.use("/thumbnails", express.static("thumbnails"));
+app.use("/videos", express.static("videos"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());

@@ -5,7 +5,7 @@ const ContentController = require("../controllers/ContentController");
 router.post(
   "/:subid/add-content",
   auth,
-  videoMiddleware.single("video"),
+  videoMiddleware.single("videos"),
   ContentController.addContent,
   (err, req, res, next) => {
     return res.send({
@@ -19,7 +19,7 @@ router.patch("/status/:cid", auth, ContentController.updateStatus);
 router.patch(
   "/modi",
   auth,
-  videoMiddleware.single("video"),
+  videoMiddleware.single("videos"),
   ContentController.updateContent,
   (err, req, res, next) => {
     return res.send({

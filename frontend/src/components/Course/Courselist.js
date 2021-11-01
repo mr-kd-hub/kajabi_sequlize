@@ -109,7 +109,7 @@ export default function Courselist() {
   const onDelete = async (id) => {
     // <Deletecourse id={id} />;
     let flage;
-    if (window.confirm(`Are You Sure?${id}`)) {
+    if (window.confirm(`Are You Sure?`)) {
       flage = await deleteCourse(id);
     }
 

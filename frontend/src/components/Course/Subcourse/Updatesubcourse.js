@@ -16,7 +16,7 @@ import { flowAction } from "../../../redux/reducer/Flowslice";
 function Updatesubcourse(props) {
   const id = props.id;
   const [title, setTitle] = useState();
-  const [status, setStatus] = useState("Draft");
+  const [status, setStatus] = useState(0);
   const dispatch = useDispatch();
   useEffect(async () => {
     const res = await authAxios.get(`/sub-course/${id}`);
