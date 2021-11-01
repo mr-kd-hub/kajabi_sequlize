@@ -29,7 +29,7 @@ const deleteCourse = async (id) => {
       });
     }
   } catch (err) {
-    toast.error(err.message, {
+    return toast.error(err.message, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

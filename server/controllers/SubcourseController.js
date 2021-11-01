@@ -8,17 +8,24 @@ const addSubcourse = async (req, res) => {
     const status = req.body.status || 0;
     const courseId = req.params.course;
     const currentUser = req.currentUser.email;
-    if (!courseId) return res.send({ message: "Course not Selected ..." });
+    if (!courseId)
+      return res.send({ success: false, message: "Course not Selected ..." });
     const course = await Course.findOne({ where: { id: courseId } });
-    if (!course) return res.send({ message: "You Can`t Add sub-Course..." });
+    if (!course)
+      return res.send({
+        success: false,
+        message: "You Can`t Add sub-Course...",
+      });
     if (course.createdBy !== currentUser)
       return res.send({
+        success: false,
         message: "You Have Not Rights To Modify this Course",
       });
     // res.send({ Auther: course.createdBy, you: currentUser, course });
 
     if (title === "")
       return res.send({
+        success: false,
         message: "Field Is Required...",
       });
     const subcourse = await course.createSub_course({
@@ -26,10 +33,19 @@ const addSubcourse = async (req, res) => {
       status,
       createdBy: currentUser,
     });
-    if (!subcourse) return res.send({ message: "Sub-Course Not Added..." });
-    return res.send({ message: "Sub-Course Added...", subcourse });
+    if (!subcourse)
+      return res.send({ success: false, message: "Sub-Course Not Added..." });
+    return res.send({
+      success: true,
+      message: "Sub-Course Added...",
+      subcourse,
+    });
   } catch (err) {
-    return res.send({ message: "Sub-Course not Added...", err });
+    return res.send({
+      success: false,
+      message: "Sub-Course not Added...",
+      err,
+    });
   }
 };
 
@@ -61,25 +77,29 @@ const updateStatus = async (req, res) => {
 const updateSubcourse = async (req, res) => {
   try {
     // return res.send(req);
-    const id = req.body.id;
+    const id = req.params.id;
     const title = req.body.title;
     const status = req.body.status || 0;
     const currentUser = req.currentUser.email;
 
-    if (!id) return res.send({ message: "No product Selected" });
-    if (title === "") return res.send({ message: "Fields are Required..." });
+    if (!id)
+      return res.send({ success: false, message: "No product Selected" });
+    if (title === "")
+      return res.send({ success: false, message: "Fields are Required..." });
     const course = await Subcourse.update(
       { title, status },
       { where: { id, createdBy: currentUser } }
     );
     if (course[0] === 0)
       return res.send({
+        success: false,
         message: "You Have Not Rights To Modify this Course...",
         course,
       });
-    return res.send({ message: "Course Updated..." });
+    return res.send({ success: true, message: "Course Updated..." });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Update Sub-course...",
       err: err.message,
     });
@@ -90,17 +110,18 @@ const updateSubcourse = async (req, res) => {
 const showCourseInUpdateForm = async (req, res) => {
   try {
     const id = req.params.subid;
-    if (!id) return res.send({ message: "No Course Selected" });
-    const subcourse = await Subcourse.findAll({
+    if (!id) return res.send({ success: false, message: "No Course Selected" });
+    const subcourse = await Subcourse.findOne({
       where: {
         id,
       },
     });
     if (subcourse.length === 0)
-      return res.send({ message: "Course Not Found..." });
-    return res.send(subcourse);
+      return res.send({ success: false, message: "Course Not Found..." });
+    return res.send({ success: true, subcourse });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Update Course...",
       err: err.message,
     });
@@ -108,12 +129,14 @@ const showCourseInUpdateForm = async (req, res) => {
 };
 //show all sub course
 const showAllSubCourse = async (req, res) => {
+  const courseId = req.params.cid;
   try {
-    const course = await Subcourse.findAll();
-    if (course.length === 0) return res.send({ message: "No Course Found." });
-    return res.send(course);
+    const course = await Subcourse.findAll({ where: { courseId } });
+    if (course.length === 0) return res.send({ success: false });
+    return res.send({ success: true, course });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Display Course...",
       err: err.message,
     });
@@ -125,17 +148,20 @@ const deleteSubCourse = async (req, res) => {
     const id = req.params.subid;
     const currentUser = req.currentUser.email;
 
-    if (!id) return res.send({ message: "No sub-Course Selected" });
+    if (!id)
+      return res.send({ success: false, message: "No sub-Course Selected" });
     const course = await Subcourse.destroy({
       where: {
         id,
         createdBy: currentUser,
       },
     });
-    if (!course) return res.send({ message: "You Cant Delete Course..." });
-    return res.send({ message: "sub-Course Deleted..." });
+    if (!course)
+      return res.send({ success: false, message: "You Cant Delete Course..." });
+    return res.send({ success: true, message: "sub-Course Deleted..." });
   } catch (err) {
     return res.send({
+      success: false,
       message: "Error in Delete sub-Course...",
       err: err.message,
     });

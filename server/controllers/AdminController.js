@@ -53,6 +53,7 @@ const login = async (req, res) => {
         return res.send({ success: false, message: "Wrong Credentials..." });
       //generate token
       const token = tokenGenerator(user.email);
+
       user.toJSON = function () {
         return { email, token };
       };

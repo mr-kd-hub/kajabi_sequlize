@@ -30,7 +30,7 @@ router.patch(
   }
 );
 router.delete("/:cid", auth, ContentController.removeVideo);
-router.get("/", auth, ContentController.showideos);
-router.get("/:cid", auth, ContentController.showideos);
+router.get("/:sid", auth, ContentController.showideos);
+router.get("/detail/:cid", auth, ContentController.showSingleVideo);
 
 module.exports = router;

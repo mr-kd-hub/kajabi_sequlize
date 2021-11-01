@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
+
 import Container from "@mui/material/Container";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -17,7 +18,7 @@ import { flowAction } from "../../redux/reducer/Flowslice";
 export default function Courseadd() {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [status, setStatus] = useState("Draft");
+  const [status, setStatus] = useState(0);
   const [thumbnail, setThumbnail] = useState();
   const flowState = useSelector((state) => state.flowReducer);
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ export default function Courseadd() {
       setThumbnail("");
       setTitle("");
       setDescription("");
-      setDescription("Draft");
+      setStatus(0);
       dispatch(flowAction.setFlow({ courseAdd: res.data }));
     } else {
       toast.error(res.data.message, {
@@ -83,9 +84,9 @@ export default function Courseadd() {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
+          {/* <Typography component="h1" variant="h5">
             Create New Course
-          </Typography>
+          </Typography> */}
           {/* <Box component="form" noValidate sx={{ mt: 1 }}> */}
           <form onSubmit={onSubmit} enctype="multipart/form-data">
             <FormControl>

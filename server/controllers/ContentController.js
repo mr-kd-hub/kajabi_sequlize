@@ -109,7 +109,8 @@ const removeVideo = async (req, res) => {
 //show all videos
 const showideos = async (req, res) => {
   try {
-    const course = await Content.findAll();
+    const subCourseId = req.params.sid;
+    const course = await Content.findAll({ where: { subCourseId } });
     if (course.length === 0) return res.send({ message: "No Videos Found." });
     return res.send(course);
   } catch (err) {
@@ -120,7 +121,8 @@ const showideos = async (req, res) => {
   }
 };
 //disply single vido
-const showVideo = async (req, res) => {
+const showSingleVideo = async (req, res) => {
+  const id = req.params.cid;
   try {
     const id = req.params.cid;
     if (!id) return res.send({ message: "No Video Selected" });
@@ -144,5 +146,5 @@ module.exports = {
   updateContent,
   removeVideo,
   showideos,
-  showVideo,
+  showSingleVideo,
 };

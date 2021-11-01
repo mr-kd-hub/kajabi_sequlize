@@ -35,7 +35,7 @@ function Course(props) {
   const authState = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const [cmp, setCmp] = React.useState(<Courselist />);
-  console.log(props);
+  // console.log(props);
   useEffect(() => {
     switch (props.subcmp) {
       case "subcourse":

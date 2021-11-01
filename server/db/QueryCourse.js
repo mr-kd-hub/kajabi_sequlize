@@ -3,7 +3,7 @@ const createCourseTable = () => {
   return `CREATE TABLE IF NOT EXISTS ${table_name}(
     id INT AUTO_INCREMENT NOT NULL,
     title VARCHAR(250) NOT NULL,
-    thumbnail TEXT DEFAULT NULL
+    thumbnail TEXT DEFAULT NULL,
     status BOOLEAN  DEFAULT 0
   )`;
 };

@@ -112,7 +112,7 @@ export default function Courselist() {
     if (window.confirm(`Are You Sure?${id}`)) {
       flage = await deleteCourse(id);
     }
-    console.log(flage);
+
     dispatch(flowAction.setFlow({ courseAdd: flage }));
     // return
   };
@@ -132,7 +132,7 @@ export default function Courselist() {
             <Button
               color="primary"
               variant="contained"
-              onClick={() => handleCoursModelShow(1)}
+              onClick={() => handleCoursModelShow()}
               startIcon={<ControlPointIcon />}
             >
               <span> New Course</span>
@@ -268,8 +268,12 @@ export default function Courselist() {
         open={showCourse}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        onClose={handleCourseModelClose}
       >
         <Box sx={ModelStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Add New
+          </Typography>
           <Courseadd />
         </Box>
       </Modal>
